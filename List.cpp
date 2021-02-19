@@ -52,12 +52,17 @@ ListItr List::last(){
 }
 void List::insertAfter(int x, ListItr position){
     ListNode<int>* newNode = new ListNode<int>(x);
+    position.current->next->prev = newNode;
+    newNode->next = position.current->next;
     position.current->next = newNode;
     newNode->prev = position.current;
-    
 };
 void List::insertBefore(int x, ListItr position){
     ListNode<int>* newNode = new ListNode<int>(x);
+    position.current->prev->next = newNode;
+    newNode->prev = position.current->prev;
+    position.current->prev = newNode;
+    newNode->next = position.current;
 };
 void List::insertAtTail(int x){
     ListNode<int>* newNode = new ListNode<int>(x);
@@ -105,4 +110,42 @@ void List::printList(){
         cout<<num<<endl;
         itr.moveForward();
     }    
+}
+List List::findSequence(int x){
+    int s=0;
+    ListItr itr1 = first();
+    ListItr itr2 = itr1;
+    List l;
+    while(s!=x){
+       s = sum(itr1,itr2);
+       if(s==x){
+           while(itr1.current!=itr2.current){
+               l.insertAtTail(itr1.retrieve());
+               itr1.moveForward();
+           }
+           l.insertAtTail(itr1.retrieve());
+           return l;
+       }
+       else if(s>x||itr2.isPastEnd()){
+           itr1.moveForward();
+           itr2 = itr1;
+       }
+       else if(s<x){
+           itr2.moveForward();
+       }
+       if(itr1.isPastEnd()){
+           cout<<"can't find it"<<endl;
+           return l;
+       }
+    }
+
+}
+
+int List::sum(ListItr pos1, ListItr pos2){
+    int s = pos1.retrieve();
+    while(pos1.current!=pos2.current){
+        pos1.moveForward();
+        s+= pos1.retrieve();
+    }
+    return s;
 }

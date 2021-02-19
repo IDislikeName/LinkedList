@@ -43,6 +43,8 @@ public:
 
     int size() const; //Returns the number of elements in the list
     void printList();
+    List findSequence(int x);
+    int sum(ListItr pos1,ListItr pos2);
 
 private:
     ListNode<int> *head, *tail;	//indicates beginning and end of the list
